@@ -1,18 +1,18 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.SignupRequestDto;
-import com.example.schedule.dto.SignupResponseDto;
-import com.example.schedule.dto.UserRequestDto;
-import com.example.schedule.dto.UserResponseDto;
+import com.example.schedule.dto.*;
 import com.example.schedule.entity.User;
 import com.example.schedule.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 
 @Service
 @RequiredArgsConstructor
@@ -62,4 +62,21 @@ public class UserService {
         User findUser = userRepository.findByIdOrElseThrow(id);
         userRepository.delete(findUser);
     }
+
+
+    public LoginResponseDto login(String email, String password) {
+        // 🔹 입력받은 userName과 일치하는 유저 조회
+        User user = userRepository.findUserByEmailOrElseThrow(email);
+
+        // 🔹 유저 정보 검증 (비밀번호 확인)
+        if (!user.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호 일치안함");
+        }
+
+        // 🔹 로그인 성공 시 userId 반환
+        // 🔹 로그인 성공 시 userId 반환
+        return new LoginResponseDto(user.getId());
+    }
 }
+
+

@@ -16,11 +16,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
         );
     }
 
-    Optional<User> findUserByUserName(String userName); // 옵셔널 벗길 메서드명
+    Optional<User> findUserByEmail(String email); // 옵셔널 벗길 메서드명
 
-    default User findUserByUserNameOrElseThrow(String userName) {
-        return findUserByUserName(userName).orElseThrow( //옵셔널 벗기기
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, userName +"없음")
+    default User findUserByEmailOrElseThrow(String email) {
+        return findUserByEmail(email).orElseThrow( //옵셔널 벗기기
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, email +"없음")
         );
     }
 }
